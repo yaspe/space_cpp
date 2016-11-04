@@ -5,7 +5,7 @@ cd build
 cmake <path to root project directory>
 make -j4
 
-the u can run it from build directory:
+then u can run it from build directory:
 
 bin/space
 

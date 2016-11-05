@@ -18,9 +18,6 @@ namespace NRender {
         void Render(const std::vector<NEngine::TObject*>&);
 
     private:
-        SDL_Texture* LoadTexture(const std::string& path) const;
-
-    private:
         SDL_Window* Window;
         SDL_Renderer* Renderer;
     };

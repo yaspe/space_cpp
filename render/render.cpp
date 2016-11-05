@@ -1,4 +1,5 @@
 #include "render.h"
+#include "texture_loader.h"
 
 #include "../engine/object.h"
 
@@ -20,28 +21,10 @@ namespace NRender {
             objRect.w = static_cast<int>(objectPtr->GetSize());
             objRect.h = static_cast<int>(objectPtr->GetSize());
 
-            SDL_RenderCopyEx(Renderer, LoadTexture(objectPtr->GetPngTextureName()), nullptr, &objRect, objectPtr->GetAngle(), nullptr, SDL_FLIP_NONE);
+            SDL_RenderCopyEx(Renderer, TTextureLoader::GetGlobal().Load(objectPtr->GetPngTextureName(), Renderer), nullptr, &objRect, objectPtr->GetAngle(), nullptr, SDL_FLIP_NONE);
         }
 
         SDL_RenderPresent(Renderer);
-    }
-
-    SDL_Texture* TRenderer::LoadTexture(const std::string& path) const {
-        //The final texture
-        SDL_Texture* newTexture = nullptr;
-        //Load image at specified path
-        SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-        if( loadedSurface == nullptr ) {
-            printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-        } else {
-            //Create texture from surface pixels
-            newTexture = SDL_CreateTextureFromSurface( Renderer, loadedSurface );
-            if( newTexture == nullptr ) {
-                printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-            }
-            //Get rid of old loaded surface
-            SDL_FreeSurface( loadedSurface );
-        } return newTexture;
     }
 
 }

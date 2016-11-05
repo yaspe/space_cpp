@@ -15,6 +15,7 @@ namespace NRender {
     class TRenderer {
     public:
         TRenderer();
+        ~TRenderer();
         void Render(const std::vector<NEngine::TObject*>&);
 
     private:

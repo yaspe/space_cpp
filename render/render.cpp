@@ -10,6 +10,11 @@ namespace NRender {
         SDL_CreateWindowAndRenderer(800, 640, SDL_WINDOW_SHOWN, &Window, &Renderer);
     }
 
+    TRenderer::~TRenderer() {
+        SDL_DestroyRenderer(Renderer);
+        SDL_DestroyWindow(Window);
+    }
+
     void TRenderer::Render(const std::vector<NEngine::TObject*>& objects) {
         SDL_SetRenderDrawColor(Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(Renderer);

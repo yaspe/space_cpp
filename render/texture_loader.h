@@ -14,6 +14,8 @@ namespace NRender {
         SDL_Texture* Load(const std::string& path, SDL_Renderer* renderer);
         static TTextureLoader& GetGlobal();
 
+        ~TTextureLoader();
+
     private:
         TTextureLoader() = default;
 

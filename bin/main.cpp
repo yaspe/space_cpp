@@ -1,9 +1,7 @@
 #include <vector>
 #include <chrono>
 
-#include "../engine/object.h"
-#include "../engine/ship.h"
-#include "../engine/planet.h"
+#include "../engine/engine.h"
 #include "../render/render.h"
 #include "../controller/controller.h"
 
@@ -16,13 +14,8 @@ std::chrono::milliseconds GetTicks() {
 int main() {
 
     // todo: move all objects creation and processing to specail engine class
-    NEngine::TShip ship;
-    NEngine::TPlanet planet;
-
-    ship.SetPosition(100, 100);
-    planet.SetPosition(400, 400);
-
-    std::vector<NEngine::TObject*> objects = {&planet, &ship};
+    NEngine::TEngine engine(2);
+    
     NRender::TRenderer renderer;
     std::chrono::milliseconds lastTicks = GetTicks();
 
@@ -34,22 +27,22 @@ int main() {
                 running = false;
                 break;
             case NController::TEventType::MainEngineOn:
-                ship.SetMainEngineStatus(true);
+                engine.GetShip().SetMainEngineStatus(true);
                 break;
             case NController::TEventType::MainEngineOff:
-                ship.SetMainEngineStatus(false);
+                engine.GetShip().SetMainEngineStatus(false);
                 break;
             case NController::TEventType::LeftEngineOn:
-                ship.SetLeftEngineStatus(true);
+                engine.GetShip().SetLeftEngineStatus(true);
                 break;
             case NController::TEventType::LeftEngineOff:
-                ship.SetLeftEngineStatus(false);
+                engine.GetShip().SetLeftEngineStatus(false);
                 break;
             case NController::TEventType::RightEngineOn:
-                ship.SetRightEngineStatus(true);
+                engine.GetShip().SetRightEngineStatus(true);
                 break;
             case NController::TEventType::RightEngineOff:
-                ship.SetRightEngineStatus(false);
+                engine.GetShip().SetRightEngineStatus(false);
                 break;
             default:
                 break;
@@ -58,10 +51,8 @@ int main() {
         if (GetTicks() - lastTicks < TICK_LIMIT)
             continue;
 
-        for (auto objectPtr : objects) {
-            objectPtr->Process();
-        }
-        renderer.Render(objects);
+        engine.Process();
+        renderer.Render(engine.GetObjects());
 
         lastTicks = GetTicks();
     }

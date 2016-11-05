@@ -30,10 +30,14 @@ namespace NRender {
         return newTexture;
     }
 
-
     TTextureLoader& TTextureLoader::GetGlobal() {
         static TTextureLoader loader;
         return loader;
+    }
+
+    TTextureLoader::~TTextureLoader() {
+        for (auto i : Textures)
+            SDL_DestroyTexture(i.second);
     }
 
 }

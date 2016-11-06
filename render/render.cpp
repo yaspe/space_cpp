@@ -7,7 +7,7 @@ namespace NRender {
         : Engine(engine)
     {
         SDL_Init(SDL_INIT_EVERYTHING);
-        SDL_CreateWindowAndRenderer(800, 640, SDL_WINDOW_SHOWN, &Window, &Renderer);
+        SDL_CreateWindowAndRenderer(Engine.GetScreenSize().X, Engine.GetScreenSize().Y, SDL_WINDOW_SHOWN, &Window, &Renderer);
     }
 
     TRenderer::~TRenderer() {

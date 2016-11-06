@@ -15,6 +15,8 @@ namespace NEngine {
         void Process();
         TPoint CalcRelativePosition(const TObject& object) const;
 
+        TPoint GetScreenSize() const;
+        TPoint GetWorldSize() const;
         std::vector<const TObject*> GetObjects() const;
         TShip& GetShip();
 

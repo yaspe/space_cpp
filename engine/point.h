@@ -20,4 +20,8 @@ namespace NEngine {
         double Y = 0;
     };
 
+    TPoint operator / (const TPoint& p, int k);
+    TPoint operator - (const TPoint& r, const TPoint& l);
+    TPoint operator + (const TPoint& r, const TPoint& l);
+
 }

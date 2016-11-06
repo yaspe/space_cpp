@@ -24,10 +24,6 @@ namespace NEngine {
         Ship.Process();
     }
 
-    TPoint TEngine::CalcRelativePosition(const TObject& object) const {
-        return object.GetPosition();
-    }
-
     std::vector<const TObject*> TEngine::GetObjects() const {
         std::vector<const TObject*> result;
         for (const auto& planet : Planets) {
@@ -44,6 +40,19 @@ namespace NEngine {
 
     TShip& TEngine::GetShip() {
         return Ship;
+    }
+
+    TPoint TEngine::GetScreenSize() const {
+        return TPoint(800, 640);
+    }
+
+    TPoint TEngine::GetWorldSize() const {
+        return TPoint(4000, 4000);
+    }
+
+    TPoint TEngine::CalcRelativePosition(const TObject& object) const {
+        TPoint result = object.GetPosition() - Ship.GetPosition() + GetScreenSize() / 2;
+        return result;
     }
 
 }

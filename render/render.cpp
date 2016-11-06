@@ -19,7 +19,7 @@ namespace NRender {
         SDL_SetRenderDrawColor(Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(Renderer);
 
-        for (const auto objectPtr : Engine.GetObjects()) {
+        for (const auto objectPtr : Engine.GetConstObjects()) {
             const NEngine::TPoint relativePos = Engine.CalcRelativePosition(*objectPtr);
             SDL_Rect objRect;
             objRect.x = static_cast<int>(relativePos.X - objectPtr->GetSize() / 2);

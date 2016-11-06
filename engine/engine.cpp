@@ -24,33 +24,44 @@ namespace NEngine {
     }
 
     void TEngine::Process() {
-        for (auto& planet : Planets) {
-            planet.Process();
+        for (auto& objectPtr : GetObjects()) {
+            objectPtr->Process();
+            if (objectPtr->GetPosition().X > GetWorldSize().X) {
+                objectPtr->Position.X -= GetWorldSize().X;
+            } else if (objectPtr->GetPosition().X < 0) {
+                objectPtr->Position.X = GetWorldSize().X - objectPtr->Position.X;
+            }
+            if (objectPtr->GetPosition().Y > GetWorldSize().Y) {
+                objectPtr->Position.Y -= GetWorldSize().Y;
+            } else if (objectPtr->GetPosition().X < 0) {
+                objectPtr->Position.Y = GetWorldSize().Y - objectPtr->Position.Y;
+            }
         }
-
-        for (auto& bullet : Ship.GetBullets()) {
-            bullet.Process();
-        }
-
-        Ship.Process();
     }
 
-    std::vector<const TObject*> TEngine::GetObjects() const {
-        std::vector<const TObject*> result;
+    std::vector<TObject*> TEngine::GetObjects() {
+        std::vector<TObject*> result;
 
-        for (const auto& star : BackGroundStars) {
+        for (auto& star : BackGroundStars) {
             result.push_back(&star);
         }
 
-        for (const auto& planet : Planets) {
+        for (auto& planet : Planets) {
             result.push_back(&planet);
         }
 
-        for (const auto& bullet : Ship.GetBullets()) {
+        for (auto& bullet : Ship.GetBullets()) {
             result.push_back(&bullet);
         }
 
         result.push_back(&Ship);
+        return result;
+    }
+
+    std::vector<const TObject*> TEngine::GetConstObjects() const {
+        std::vector<const TObject*> result;
+        for (auto& objectPtr : const_cast<TEngine*>(this)->GetObjects())
+            result.push_back(objectPtr);
         return result;
     }
 
@@ -68,6 +79,10 @@ namespace NEngine {
 
     TPoint TEngine::CalcRelativePosition(const TObject& object) const {
         TPoint result = object.GetPosition() - Ship.GetPosition() + GetScreenSize() / 2;
+        if (result.X > GetWorldSize().X)
+            result.X -= GetWorldSize().X;
+        if (result.Y > GetWorldSize().Y)
+            result.Y -= GetWorldSize().Y;
         return result;
     }
 

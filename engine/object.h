@@ -7,6 +7,7 @@
 namespace NEngine {
 
     class TObject {
+        friend class TEngine;
     public:
 
         virtual ~TObject() = default;

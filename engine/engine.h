@@ -18,7 +18,8 @@ namespace NEngine {
 
         TPoint GetScreenSize() const;
         TPoint GetWorldSize() const;
-        std::vector<const TObject*> GetObjects() const;
+        std::vector<TObject*> GetObjects();
+        std::vector<const TObject*> GetConstObjects() const;
         TShip& GetShip();
 
     private:

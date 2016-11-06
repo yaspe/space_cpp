@@ -10,7 +10,8 @@ namespace NEngine {
     TEngine::TEngine() {
         for (size_t i = 0; i < PLANETS_NUM; ++i) {
             TPlanet planet;
-            planet.SetPosition((i + 1) * 200, (i + 1) * 200);
+            planet.SetPosition(rand() %static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
+            planet.Speed.X = (10 - rand() % 20) / 10.0;
             Planets.emplace_back(std::move(planet));
         }
 
@@ -20,7 +21,7 @@ namespace NEngine {
             BackGroundStars.emplace_back(std::move(star));
         }
 
-        Ship.SetPosition(3950, 3950);
+        Ship.SetPosition(500, 500);
     }
 
     void TEngine::Process() {
@@ -79,13 +80,13 @@ namespace NEngine {
 
     TPoint TEngine::CalcRelativePosition(const TObject& object) const {
         TPoint result = object.GetPosition() - Ship.GetPosition() + GetScreenSize() / 2;
-        if (result.X > GetWorldSize().X) {
+        if (result.X + object.Size > GetWorldSize().X) {
             result.X -= GetWorldSize().X;
         } else if (Ship.Position.X > GetWorldSize().X - GetScreenSize().X / 2 && object.Position.X < object.Size + GetScreenSize().X / 2) {
             result.X = GetWorldSize().X + object.Position.X - Ship.Position.X + GetScreenSize().X / 2;
         }
 
-        if (result.Y > GetWorldSize().Y) {
+        if (result.Y + object.Size > GetWorldSize().Y) {
             result.Y -= GetWorldSize().Y;
         } else if (Ship.Position.Y > GetWorldSize().Y - GetScreenSize().Y / 2 && object.Position.Y < object.Size + GetScreenSize().Y / 2) {
             result.Y = GetWorldSize().Y + object.Position.Y - Ship.Position.Y + GetScreenSize().Y / 2;

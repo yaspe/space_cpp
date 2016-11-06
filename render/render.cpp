@@ -21,6 +21,12 @@ namespace NRender {
 
         for (const auto objectPtr : Engine.GetConstObjects()) {
             const NEngine::TPoint relativePos = Engine.CalcRelativePosition(*objectPtr);
+            if (relativePos.X + objectPtr->GetSize() < 0
+                || relativePos.X - objectPtr->GetSize() > Engine.GetScreenSize().X
+                || relativePos.Y + objectPtr->GetSize() < 0
+                || relativePos.Y - objectPtr->GetSize() > Engine.GetScreenSize().Y)
+                continue;
+
             SDL_Rect objRect;
             objRect.x = static_cast<int>(relativePos.X - objectPtr->GetSize() / 2);
             objRect.y = static_cast<int>(relativePos.Y - objectPtr->GetSize() / 2);

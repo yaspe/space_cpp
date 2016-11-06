@@ -44,6 +44,9 @@ int main() {
             case NController::TEventType::RightEngineOff:
                 engine.GetShip().SetRightEngineStatus(false);
                 break;
+            case NController::TEventType::Shoot:
+                engine.GetShip().Shoot();
+                break;
             default:
                 break;
         }

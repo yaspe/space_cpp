@@ -11,6 +11,7 @@ namespace NController {
         LeftEngineOff,
         RightEngineOn,
         RightEngineOff,
+        Shoot,
     };
 
     TEventType PollEvent();

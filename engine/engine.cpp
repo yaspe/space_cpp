@@ -1,5 +1,4 @@
 #include "engine.h"
-#include "planet.h"
 
 namespace NEngine {
 
@@ -18,13 +17,23 @@ namespace NEngine {
             planet.Process();
         }
 
+        for (auto& bullet : Ship.GetBullets()) {
+            bullet.Process();
+        }
+
         Ship.Process();
     }
 
     std::vector<TObject*> TEngine::GetObjects() {
         std::vector<TObject*> result;
-        for (auto& planet : Planets)
+        for (auto& planet : Planets) {
             result.push_back(&planet);
+        }
+
+        for (auto& bullet : Ship.GetBullets()) {
+            result.push_back(&bullet);
+        }
+
         result.push_back(&Ship);
         return result;
     }

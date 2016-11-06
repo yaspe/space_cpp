@@ -11,14 +11,16 @@ namespace NController {
             switch (event.type) {
                 case SDL_QUIT: return TEventType::Quite;
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_DOWN)
+                    if (event.key.keysym.sym == SDLK_UP)
                         return TEventType::MainEngineOn;
                     if (event.key.keysym.sym == SDLK_LEFT)
                         return TEventType::LeftEngineOn;
                     if (event.key.keysym.sym == SDLK_RIGHT)
                         return TEventType::RightEngineOn;
-                case SDL_KEYUP:
                     if (event.key.keysym.sym == SDLK_DOWN)
+                        return TEventType::Shoot;
+                case SDL_KEYUP:
+                    if (event.key.keysym.sym == SDLK_UP)
                         return TEventType::MainEngineOff;
                     if (event.key.keysym.sym == SDLK_LEFT)
                         return TEventType::LeftEngineOff;

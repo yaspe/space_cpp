@@ -1,12 +1,23 @@
 #include "engine.h"
 
+#include <cstdlib>
+
 namespace NEngine {
 
-    TEngine::TEngine(size_t planets) {
-        for (size_t i = 0; i < planets; ++i) {
+    static const size_t PLANETS_NUM = 10;
+    static const size_t BG_STARS_NUM = 5000;
+
+    TEngine::TEngine() {
+        for (size_t i = 0; i < PLANETS_NUM; ++i) {
             TPlanet planet;
             planet.SetPosition((i + 1) * 200, (i + 1) * 200);
             Planets.emplace_back(std::move(planet));
+        }
+
+        for (size_t i = 0; i < BG_STARS_NUM; ++i) {
+            TBackGroundStar star;
+            star.SetPosition(rand() % static_cast<int>(GetWorldSize().X), rand() % static_cast<int>(GetWorldSize().Y));
+            BackGroundStars.emplace_back(std::move(star));
         }
 
         Ship.SetPosition(100, 300);
@@ -26,6 +37,11 @@ namespace NEngine {
 
     std::vector<const TObject*> TEngine::GetObjects() const {
         std::vector<const TObject*> result;
+
+        for (const auto& star : BackGroundStars) {
+            result.push_back(&star);
+        }
+
         for (const auto& planet : Planets) {
             result.push_back(&planet);
         }

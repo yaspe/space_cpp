@@ -14,7 +14,7 @@ std::chrono::milliseconds GetTicks() {
 int main() {
 
     // todo: move all objects creation and processing to specail engine class
-    NEngine::TEngine engine(2);
+    NEngine::TEngine engine;
     
     NRender::TRenderer renderer(engine);
     std::chrono::milliseconds lastTicks = GetTicks();

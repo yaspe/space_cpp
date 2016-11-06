@@ -3,6 +3,7 @@
 #include "object.h"
 #include "planet.h"
 #include "ship.h"
+#include "background_star.h"
 
 #include <vector>
 
@@ -10,7 +11,7 @@ namespace NEngine {
 
     class TEngine {
     public:
-        TEngine(size_t planets);
+        TEngine();
 
         void Process();
         TPoint CalcRelativePosition(const TObject& object) const;
@@ -22,6 +23,7 @@ namespace NEngine {
 
     private:
         std::vector<TPlanet> Planets;
+        std::vector<TBackGroundStar> BackGroundStars;
         TShip Ship;
     };
 

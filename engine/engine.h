@@ -13,7 +13,9 @@ namespace NEngine {
         TEngine(size_t planets);
 
         void Process();
-        std::vector<TObject*> GetObjects();
+        TPoint CalcRelativePosition(const TObject& object) const;
+
+        std::vector<const TObject*> GetObjects() const;
         TShip& GetShip();
 
     private:

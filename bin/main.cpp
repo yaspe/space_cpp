@@ -16,7 +16,7 @@ int main() {
     // todo: move all objects creation and processing to specail engine class
     NEngine::TEngine engine(2);
     
-    NRender::TRenderer renderer;
+    NRender::TRenderer renderer(engine);
     std::chrono::milliseconds lastTicks = GetTicks();
 
     bool running = true;
@@ -55,7 +55,7 @@ int main() {
             continue;
 
         engine.Process();
-        renderer.Render(engine.GetObjects());
+        renderer.Render();
 
         lastTicks = GetTicks();
     }

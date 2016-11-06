@@ -21,7 +21,7 @@ namespace NEngine {
 
         void Shoot();
 
-        std::vector<TBullet>& GetBullets();
+        std::vector<TBullet>& GetBullets() const;
 
     private:
         bool CanShoot() const;
@@ -29,6 +29,6 @@ namespace NEngine {
     private:
         const size_t TicksToReload = 50;
         size_t Ticks = 50;
-        std::vector<TBullet> Bullets;
+        mutable std::vector<TBullet> Bullets;
     };
 }

@@ -1,11 +1,11 @@
 #include "render.h"
 #include "texture_loader.h"
 
-#include "../engine/object.h"
-
 namespace NRender {
 
-    TRenderer::TRenderer() {
+    TRenderer::TRenderer(const NEngine::TEngine& engine)
+        : Engine(engine)
+    {
         SDL_Init(SDL_INIT_EVERYTHING);
         SDL_CreateWindowAndRenderer(800, 640, SDL_WINDOW_SHOWN, &Window, &Renderer);
     }
@@ -15,14 +15,15 @@ namespace NRender {
         SDL_DestroyWindow(Window);
     }
 
-    void TRenderer::Render(const std::vector<NEngine::TObject*>& objects) {
+    void TRenderer::Render() {
         SDL_SetRenderDrawColor(Renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(Renderer);
 
-        for (const auto objectPtr : objects) {
-            SDL_Rect objRect ;
-            objRect.x = static_cast<int>(objectPtr->GetPosition().X - objectPtr->GetSize() / 2);
-            objRect.y = static_cast<int>(objectPtr->GetPosition().Y - objectPtr->GetSize() / 2);
+        for (const auto objectPtr : Engine.GetObjects()) {
+            const NEngine::TPoint relativePos = Engine.CalcRelativePosition(*objectPtr);
+            SDL_Rect objRect;
+            objRect.x = static_cast<int>(relativePos.X - objectPtr->GetSize() / 2);
+            objRect.y = static_cast<int>(relativePos.Y - objectPtr->GetSize() / 2);
             objRect.w = static_cast<int>(objectPtr->GetSize());
             objRect.h = static_cast<int>(objectPtr->GetSize());
 

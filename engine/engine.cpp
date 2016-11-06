@@ -24,13 +24,17 @@ namespace NEngine {
         Ship.Process();
     }
 
-    std::vector<TObject*> TEngine::GetObjects() {
-        std::vector<TObject*> result;
-        for (auto& planet : Planets) {
+    TPoint TEngine::CalcRelativePosition(const TObject& object) const {
+        return object.GetPosition();
+    }
+
+    std::vector<const TObject*> TEngine::GetObjects() const {
+        std::vector<const TObject*> result;
+        for (const auto& planet : Planets) {
             result.push_back(&planet);
         }
 
-        for (auto& bullet : Ship.GetBullets()) {
+        for (const auto& bullet : Ship.GetBullets()) {
             result.push_back(&bullet);
         }
 

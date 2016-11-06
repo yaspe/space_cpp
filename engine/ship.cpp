@@ -64,7 +64,7 @@ namespace NEngine {
         Bullets.emplace_back(std::move(bullet));
     }
 
-    std::vector<TBullet>& TShip::GetBullets() {
+    std::vector<TBullet>& TShip::GetBullets() const {
         std::vector<TBullet> goodBullets;
         for (auto& bullet : Bullets) {
             if (!bullet.Expired()) {

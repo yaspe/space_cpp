@@ -9,6 +9,8 @@ namespace NEngine {
         TBackGroundStar();
 
         std::string GetPngTextureName() const override;
+
+        void Process() override;
     };
 
 }

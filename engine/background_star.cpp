@@ -12,4 +12,8 @@ namespace NEngine {
         return "bgstar.png";
     }
 
+    // тут нет смысла что-то вычислять
+    void TBackGroundStar::Process() {
+    }
+
 }

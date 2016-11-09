@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace NEngine {
 
     struct TPoint {
@@ -14,6 +16,10 @@ namespace NEngine {
             X += other.X;
             Y += other.Y;
             return *this;
+        }
+
+        double Straight() const {
+            return sqrt(X*X + Y*Y);
         }
 
         double X = 0;

@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-static const double MAIN_ENGINE_POWER = 0.05; // pixels per time
+static const double MAIN_ENGINE_POWER = 0.15; // pixels per time
 static const double SIDE_ENGINE_POWER = 0.35; // degrees
 static const double BULLET_SPEED = 5;
 

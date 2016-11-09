@@ -17,7 +17,7 @@ namespace NEngine {
 
     private:
         size_t Ticks = 0;
-        const size_t TicksToExpire = 250;
+        const size_t TicksToExpire = 500;
     };
 
 }

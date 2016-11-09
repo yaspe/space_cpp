@@ -1,14 +1,21 @@
 #include "object.h"
 
+static const double MAX_SPEED = 10;
+
 namespace NEngine {
 
     void TObject::Process() {
-        Speed += Acc;
+        auto newSpeed = Speed + Acc;
+        if (newSpeed.Straight() < MAX_SPEED)
+            Speed += Acc;
         Position += Speed;
         AngleSpeed += AngleAcc;
         Angle += AngleSpeed;
     }
 
+    bool TObject::IsGravityDealer() const {
+        return Mass > 0;
+    }
 
     const TPoint& TObject::GetPosition() const {
         return Position;
@@ -28,6 +35,10 @@ namespace NEngine {
 
     size_t TObject::GetSize() const {
         return Size;
+    }
+
+    size_t TObject::GetMass() const {
+        return Mass;
     }
 
     void TObject::SetPosition(double x, double y) {

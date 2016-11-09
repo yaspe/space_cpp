@@ -19,6 +19,9 @@ namespace NEngine {
         const TPoint& GetAcc() const;
         double GetAngle() const;
         size_t GetSize() const;
+        size_t GetMass() const;
+
+        bool IsGravityDealer() const;
 
         void SetPosition(double x, double y);
         void SetPosition(const TPoint& point);
@@ -33,6 +36,7 @@ namespace NEngine {
         double AngleSpeed = 0;
         double AngleAcc = 0;
         size_t Size = 0;
+        size_t Mass = 0;
     };
 
 }

@@ -6,6 +6,7 @@ namespace NEngine {
 
     static const size_t PLANETS_NUM = 10;
     static const size_t BG_STARS_NUM = 5000;
+    static const double GRAVITY = 70.0;
 
     TEngine::TEngine() {
         for (size_t i = 0; i < PLANETS_NUM; ++i) {
@@ -38,6 +39,26 @@ namespace NEngine {
                 objectPtr->Position.Y = GetWorldSize().Y - objectPtr->Position.Y;
             }
         }
+        ApplyGravity();
+    }
+
+    template <class T>
+    static TPoint ApplyGravityImpl(const TPlanet& planet, T& object, const TPoint& planetPos, const TPoint& objPos) {
+        auto distance = planetPos - objPos;
+        auto totalDistance = std::max(static_cast<size_t>(sqrt(distance.X * distance.X + distance.Y * distance.Y)), planet.GetSize());
+        auto totalForce = GRAVITY * planet.GetMass() / (totalDistance * totalDistance);
+        TPoint force(distance.X * totalForce / totalDistance, distance.Y * totalForce / totalDistance);
+        return force;
+    }
+
+    void TEngine::ApplyGravity() {
+        const TPoint shipPos = CalcRelativePosition(Ship);
+        for (auto planet : Planets) {
+            const TPoint planetPos = CalcRelativePosition(planet);
+            Ship.Speed += ApplyGravityImpl(planet, Ship, planetPos, shipPos);
+            for (auto& bullet : Ship.GetBullets())
+                bullet.Speed += ApplyGravityImpl(planet, bullet, planetPos, CalcRelativePosition(bullet));
+        }
     }
 
     std::vector<TObject*> TEngine::GetObjects() {
@@ -60,6 +81,8 @@ namespace NEngine {
     }
 
     std::vector<const TObject*> TEngine::GetConstObjects() const {
+        // todo: тут плохо сделано с тз производительности
+        // todo: можно бы переделать, но не критично, пока не жмет
         std::vector<const TObject*> result;
         for (auto& objectPtr : const_cast<TEngine*>(this)->GetObjects())
             result.push_back(objectPtr);

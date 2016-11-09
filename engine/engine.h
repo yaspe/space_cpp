@@ -23,6 +23,9 @@ namespace NEngine {
         TShip& GetShip();
 
     private:
+        void ApplyGravity();
+
+    private:
         std::vector<TPlanet> Planets;
         std::vector<TBackGroundStar> BackGroundStars;
         TShip Ship;

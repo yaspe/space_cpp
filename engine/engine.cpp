@@ -45,7 +45,7 @@ namespace NEngine {
     template <class T>
     static TPoint ApplyGravityImpl(const TPlanet& planet, T& object, const TPoint& planetPos, const TPoint& objPos) {
         auto distance = planetPos - objPos;
-        auto totalDistance = std::max(static_cast<size_t>(sqrt(distance.X * distance.X + distance.Y * distance.Y)), planet.GetSize());
+        auto totalDistance = std::max(static_cast<size_t>(distance.Straight()), planet.GetSize());
         auto totalForce = GRAVITY * planet.GetMass() / (totalDistance * totalDistance);
         TPoint force(distance.X * totalForce / totalDistance, distance.Y * totalForce / totalDistance);
         return force;

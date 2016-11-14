@@ -24,11 +24,13 @@ namespace NEngine {
 
     private:
         void ApplyGravity();
+        void ApplyGravityToSheep(TShip& ship);
 
     private:
         std::vector<TPlanet> Planets;
         std::vector<TBackGroundStar> BackGroundStars;
         TShip Ship;
+        std::vector<TShip> AiShips;
     };
 
 }

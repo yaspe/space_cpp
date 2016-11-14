@@ -8,6 +8,8 @@ namespace NEngine {
     static const size_t BG_STARS_NUM = 5000;
     static const double GRAVITY = 70.0;
 
+    static const size_t AI_SHIPS_NUM = 2;
+
     TEngine::TEngine() {
         for (size_t i = 0; i < PLANETS_NUM; ++i) {
             TPlanet planet;
@@ -20,6 +22,12 @@ namespace NEngine {
             TBackGroundStar star;
             star.SetPosition(rand() % static_cast<int>(GetWorldSize().X), rand() % static_cast<int>(GetWorldSize().Y));
             BackGroundStars.emplace_back(std::move(star));
+        }
+
+        for (size_t i = 0; i < AI_SHIPS_NUM; ++i) {
+            TShip ship;
+            ship.SetPosition(rand() %static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
+            AiShips.emplace_back(std::move(ship));
         }
 
         Ship.SetPosition(500, 500);
@@ -42,8 +50,7 @@ namespace NEngine {
         ApplyGravity();
     }
 
-    template <class T>
-    static TPoint ApplyGravityImpl(const TPlanet& planet, T& object, const TPoint& planetPos, const TPoint& objPos) {
+    static TPoint ApplyGravityImpl(const TPlanet& planet, TObject& object, const TPoint& planetPos, const TPoint& objPos) {
         auto distance = planetPos - objPos;
         auto totalDistance = std::max(static_cast<size_t>(distance.Straight()), planet.GetSize());
         auto totalForce = GRAVITY * planet.GetMass() / (totalDistance * totalDistance);
@@ -51,14 +58,20 @@ namespace NEngine {
         return force;
     }
 
-    void TEngine::ApplyGravity() {
-        const TPoint shipPos = CalcRelativePosition(Ship);
+    void TEngine::ApplyGravityToSheep(TShip& ship) {
+        const TPoint shipPos = CalcRelativePosition(ship);
         for (auto planet : Planets) {
             const TPoint planetPos = CalcRelativePosition(planet);
-            Ship.Speed += ApplyGravityImpl(planet, Ship, planetPos, shipPos);
-            for (auto& bullet : Ship.GetBullets())
+            ship.Speed += ApplyGravityImpl(planet, ship, planetPos,shipPos);
+            for (auto& bullet : ship.GetBullets())
                 bullet.Speed += ApplyGravityImpl(planet, bullet, planetPos, CalcRelativePosition(bullet));
         }
+    }
+
+    void TEngine::ApplyGravity() {
+        ApplyGravityToSheep(Ship);
+        for (auto& aiShip : AiShips)
+            ApplyGravityToSheep(aiShip);
     }
 
     std::vector<TObject*> TEngine::GetObjects() {
@@ -74,6 +87,10 @@ namespace NEngine {
 
         for (auto& bullet : Ship.GetBullets()) {
             result.push_back(&bullet);
+        }
+
+        for (auto& ship : AiShips) {
+            result.push_back(&ship);
         }
 
         result.push_back(&Ship);

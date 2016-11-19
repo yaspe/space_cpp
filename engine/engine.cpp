@@ -4,17 +4,24 @@
 
 namespace NEngine {
 
-    static const size_t PLANETS_NUM = 10;
+    static const size_t PLANETS_NUM = 3;
     static const size_t BG_STARS_NUM = 5000;
     static const double GRAVITY = 70.0;
-
+    static const TPoint WORLD_SIZE = TPoint(4000, 4000);
+    static const TPoint SCREEN_SIZE = TPoint(800, 640);
+    static const double PLANET_MAX_ORBIT_SPEED = 0.001;
+    static const size_t PLANET_MARGIN = 100;
     static const size_t AI_SHIPS_NUM = 2;
 
     TEngine::TEngine() {
+        Sun.SetPosition(GetWorldCenter());
+
         for (size_t i = 0; i < PLANETS_NUM; ++i) {
-            TPlanet planet;
-            planet.SetPosition(rand() %static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
-            planet.Speed.X = (10 - rand() % 20) / 10.0;
+            TPlanet planet(Sun.Position);
+            double planetShift = (GetMinWorldBoundary() / 2 - Sun.Size - PLANET_MARGIN) / PLANETS_NUM;
+            planet.SetOrbitRadius(planet.Size + planetShift * i + Sun.Size + PLANET_MARGIN);
+            planet.SetOrbitSpeed(PLANET_MAX_ORBIT_SPEED - rand() % static_cast<int>(20000 * PLANET_MAX_ORBIT_SPEED) / 10000.0);
+            planet.SetOrbitAngle(rand() % 360);
             Planets.emplace_back(std::move(planet));
         }
 
@@ -26,11 +33,11 @@ namespace NEngine {
 
         for (size_t i = 0; i < AI_SHIPS_NUM; ++i) {
             TShip ship;
-            ship.SetPosition(rand() %static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
+            ship.SetPosition(rand() % static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
             AiShips.emplace_back(std::move(ship));
         }
 
-        Ship.SetPosition(500, 500);
+        Ship.SetPosition(3500, 2000);
     }
 
     void TEngine::Process() {
@@ -82,6 +89,8 @@ namespace NEngine {
                 result.push_back(&star);
             }
 
+        result.push_back(&Sun);
+
         for (auto& planet : Planets) {
             result.push_back(&planet);
         }
@@ -117,11 +126,20 @@ namespace NEngine {
     }
 
     TPoint TEngine::GetScreenSize() const {
-        return TPoint(800, 640);
+        return SCREEN_SIZE;
     }
 
     TPoint TEngine::GetWorldSize() const {
-        return TPoint(4000, 4000);
+        return WORLD_SIZE;
+    }
+
+    TPoint TEngine::GetWorldCenter() const {
+        TPoint center = TPoint(GetWorldSize().X / 2, GetWorldSize().Y / 2);
+        return center;
+    }
+
+    double TEngine::GetMinWorldBoundary() const {
+        return std::min(GetWorldSize().Y, GetWorldSize().X);
     }
 
     TPoint TEngine::CalcRelativePosition(const TObject& object) const {

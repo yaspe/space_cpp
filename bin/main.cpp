@@ -1,5 +1,6 @@
 #include <vector>
 #include <chrono>
+#include <ctime>
 
 #include "../engine/engine.h"
 #include "../render/render.h"
@@ -12,6 +13,8 @@ std::chrono::milliseconds GetTicks() {
 }
 
 int main() {
+
+    srand(time(NULL));
 
     // todo: move all objects creation and processing to specail engine class
     NEngine::TEngine engine;

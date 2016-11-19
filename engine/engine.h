@@ -4,6 +4,7 @@
 #include "planet.h"
 #include "ship.h"
 #include "background_star.h"
+#include "sun.h"
 
 #include <vector>
 
@@ -18,6 +19,9 @@ namespace NEngine {
 
         TPoint GetScreenSize() const;
         TPoint GetWorldSize() const;
+        TPoint GetWorldCenter() const;
+        double GetMinWorldBoundary() const;
+
         std::vector<TObject*> GetObjects(bool mapOnly=false);
         std::vector<const TObject*> GetConstObjects(bool mapOnly=false) const;
         TShip& GetShip();
@@ -32,6 +36,7 @@ namespace NEngine {
         std::vector<TBackGroundStar> BackGroundStars;
         TShip Ship;
         std::vector<TShip> AiShips;
+        TSun Sun;
     };
 
 }

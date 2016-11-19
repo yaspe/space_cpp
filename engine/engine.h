@@ -26,6 +26,7 @@ namespace NEngine {
     private:
         void ApplyGravity();
         void ApplyGravityToSheep(TShip& ship);
+        void CheckCollisions();
 
     private:
         std::vector<TPlanet> Planets;

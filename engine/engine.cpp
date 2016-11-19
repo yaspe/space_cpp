@@ -50,6 +50,10 @@ namespace NEngine {
         ApplyGravity();
     }
 
+    void TEngine::CheckCollisions() {
+
+    }
+
     static TPoint ApplyGravityImpl(const TPlanet& planet, TObject& object, const TPoint& planetPos, const TPoint& objPos) {
         auto distance = planetPos - objPos;
         auto totalDistance = std::max(static_cast<size_t>(distance.Straight()), planet.GetSize());

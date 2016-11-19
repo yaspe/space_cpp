@@ -51,7 +51,7 @@ namespace NRender {
         const int mapTopY = static_cast<int>(Engine.GetScreenSize().Y - mapSize - 10);
         const int objSize = 6;
 
-        SDL_Rect border = {mapTopX, mapTopY, mapSize, mapSize};
+        SDL_Rect border = {mapTopX - objSize, mapTopY - objSize, mapSize + objSize * 2, mapSize + objSize * 2};
         SDL_SetRenderDrawColor(Renderer, 100, 100, 100, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(Renderer, &border);
 

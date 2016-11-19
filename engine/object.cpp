@@ -11,6 +11,7 @@ namespace NEngine {
         Position += Speed;
         AngleSpeed += AngleAcc;
         Angle += AngleSpeed;
+        AngleSpeed *= 0.99;
     }
 
     bool TObject::IsGravityDealer() const {

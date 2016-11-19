@@ -18,9 +18,10 @@ namespace NEngine {
 
         TPoint GetScreenSize() const;
         TPoint GetWorldSize() const;
-        std::vector<TObject*> GetObjects();
-        std::vector<const TObject*> GetConstObjects() const;
+        std::vector<TObject*> GetObjects(bool mapOnly=false);
+        std::vector<const TObject*> GetConstObjects(bool mapOnly=false) const;
         TShip& GetShip();
+        const TShip& GetConstShip() const;
 
     private:
         void ApplyGravity();

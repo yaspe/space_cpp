@@ -17,6 +17,9 @@ namespace NRender {
         void Render();
 
     private:
+        void DrawMap();
+
+    private:
         const NEngine::TEngine& Engine;
         SDL_Window* Window;
         SDL_Renderer* Renderer;

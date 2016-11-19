@@ -43,7 +43,7 @@ namespace NEngine {
             }
             if (objectPtr->GetPosition().Y > GetWorldSize().Y) {
                 objectPtr->Position.Y -= GetWorldSize().Y;
-            } else if (objectPtr->GetPosition().X < 0) {
+            } else if (objectPtr->GetPosition().Y < 0) {
                 objectPtr->Position.Y = GetWorldSize().Y - objectPtr->Position.Y;
             }
         }
@@ -74,20 +74,22 @@ namespace NEngine {
             ApplyGravityToSheep(aiShip);
     }
 
-    std::vector<TObject*> TEngine::GetObjects() {
+    std::vector<TObject*> TEngine::GetObjects(bool mapOnly) {
         std::vector<TObject*> result;
 
-        for (auto& star : BackGroundStars) {
-            result.push_back(&star);
-        }
+        if (!mapOnly)
+            for (auto& star : BackGroundStars) {
+                result.push_back(&star);
+            }
 
         for (auto& planet : Planets) {
             result.push_back(&planet);
         }
 
-        for (auto& bullet : Ship.GetBullets()) {
-            result.push_back(&bullet);
-        }
+        if (!mapOnly)
+            for (auto& bullet : Ship.GetBullets()) {
+                result.push_back(&bullet);
+            }
 
         for (auto& ship : AiShips) {
             result.push_back(&ship);
@@ -97,16 +99,20 @@ namespace NEngine {
         return result;
     }
 
-    std::vector<const TObject*> TEngine::GetConstObjects() const {
+    std::vector<const TObject*> TEngine::GetConstObjects(bool mapOnly) const {
         // todo: тут плохо сделано с тз производительности
         // todo: можно бы переделать, но не критично, пока не жмет
         std::vector<const TObject*> result;
-        for (auto& objectPtr : const_cast<TEngine*>(this)->GetObjects())
+        for (auto& objectPtr : const_cast<TEngine*>(this)->GetObjects(mapOnly))
             result.push_back(objectPtr);
         return result;
     }
 
     TShip& TEngine::GetShip() {
+        return Ship;
+    }
+
+    const TShip& TEngine::GetConstShip() const {
         return Ship;
     }
 

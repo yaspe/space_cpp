@@ -2,9 +2,9 @@
 
 #include <cmath>
 
-static const double MAIN_ENGINE_POWER = 0.15; // pixels per time
-static const double SIDE_ENGINE_POWER = 0.35; // degrees
-static const double BULLET_SPEED = 5;
+static const double MAIN_ENGINE_POWER = 0.25; // pixels per time
+static const double SIDE_ENGINE_POWER = 0.65; // degrees
+static const double BULLET_SPEED = 15;
 
 static double DegreesToRadians(double degrees) {
     return M_PI * degrees / 180;

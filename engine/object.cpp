@@ -6,7 +6,7 @@ namespace NEngine {
 
     void TObject::Process() {
         auto newSpeed = Speed + Acc;
-        if (newSpeed.Straight() < MAX_SPEED)
+        if (newSpeed.Straight() < MAX_SPEED || newSpeed.Straight() < Speed.Straight())
             Speed += Acc;
         Position += Speed;
         AngleSpeed += AngleAcc;

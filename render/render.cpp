@@ -49,22 +49,24 @@ namespace NRender {
         const size_t mapSize = 150;
         const int mapTopX = static_cast<int>(Engine.GetScreenSize().X - mapSize - 10);
         const int mapTopY = static_cast<int>(Engine.GetScreenSize().Y - mapSize - 10);
-        const int objSize = 6;
+        const int offset = 5;
 
-        SDL_Rect border = {mapTopX - objSize, mapTopY - objSize, mapSize + objSize * 2, mapSize + objSize * 2};
+        SDL_Rect border = {mapTopX - offset, mapTopY - offset, mapSize + offset * 2, mapSize + offset * 2};
         SDL_SetRenderDrawColor(Renderer, 100, 100, 100, SDL_ALPHA_OPAQUE);
         SDL_RenderDrawRect(Renderer, &border);
 
         for (const auto objectPtr : Engine.GetConstObjects(true)) {
+            size_t objSize = 5 + 20 * objectPtr->GetSize() / 1000;
+
             SDL_Rect objRect;
             objRect.x = mapTopX + static_cast<int>(mapSize * objectPtr->GetPosition().X / Engine.GetWorldSize().X - objSize / 2);
             objRect.y = mapTopY + static_cast<int>(mapSize * objectPtr->GetPosition().Y / Engine.GetWorldSize().Y - objSize / 2);
-            objRect.w = objSize;
-            objRect.h = objSize;
+            objRect.w = static_cast<int>(objSize);
+            objRect.h = static_cast<int>(objSize);
             if (objectPtr == &Engine.GetConstShip()) {
                 SDL_SetRenderDrawColor(Renderer, 10, 10, 255, SDL_ALPHA_OPAQUE);
             } else {
-                const uint8_t color = static_cast<uint8_t>(objectPtr->GetSize() % 255);
+                const uint8_t color =  static_cast<uint8_t>(100 + objectPtr->GetSize() % 155);
                 SDL_SetRenderDrawColor(Renderer, color, color, color, SDL_ALPHA_OPAQUE);
             }
             SDL_RenderFillRect(Renderer, &objRect);

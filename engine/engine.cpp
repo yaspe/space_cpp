@@ -1,6 +1,8 @@
 #include "engine.h"
+#include "ai.h"
 
 #include <cstdlib>
+#include <iostream>
 
 namespace NEngine {
 
@@ -11,14 +13,15 @@ namespace NEngine {
     static const TPoint SCREEN_SIZE = TPoint(800, 640);
     static const double PLANET_MAX_ORBIT_SPEED = 0.001;
     static const size_t PLANET_MARGIN = 100;
-    static const size_t AI_SHIPS_NUM = 2;
+    static const size_t FRIENDLY_SHIPS_NUM = 2;
+    static const size_t ENEMY_SHIPS_NUM = 3;
 
     TEngine::TEngine() {
         Sun.SetPosition(GetWorldCenter());
 
         for (size_t i = 0; i < PLANETS_NUM; ++i) {
             TPlanet planet(Sun.Position);
-            double planetShift = (GetMinWorldBoundary() / 2 - Sun.Size - PLANET_MARGIN) / PLANETS_NUM;
+            const double planetShift = (GetMinWorldBoundary() / 2 - Sun.Size - PLANET_MARGIN) / PLANETS_NUM;
             planet.SetOrbitRadius(planet.Size + planetShift * i + Sun.Size + PLANET_MARGIN);
             planet.SetOrbitSpeed(PLANET_MAX_ORBIT_SPEED - rand() % static_cast<int>(20000 * PLANET_MAX_ORBIT_SPEED) / 10000.0);
             planet.SetOrbitAngle(rand() % 360);
@@ -31,10 +34,16 @@ namespace NEngine {
             BackGroundStars.emplace_back(std::move(star));
         }
 
-        for (size_t i = 0; i < AI_SHIPS_NUM; ++i) {
+        for (size_t i = 0; i < FRIENDLY_SHIPS_NUM; ++i) {
             TShip ship;
             ship.SetPosition(rand() % static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
-            AiShips.emplace_back(std::move(ship));
+            FriendlyShips.emplace_back(std::move(ship));
+        }
+
+        for (size_t i = 0; i < ENEMY_SHIPS_NUM; ++i) {
+            TShip ship;
+            ship.SetPosition(rand() % static_cast<int>(GetWorldSize().X), (i + 1) * GetWorldSize().Y / PLANETS_NUM);
+            EnemyShips.emplace_back(std::move(ship));
         }
 
         Ship.SetPosition(3500, 2000);
@@ -55,6 +64,7 @@ namespace NEngine {
             }
         }
         ApplyGravity();
+        ApplyAi();
     }
 
     void TEngine::CheckCollisions() {
@@ -71,7 +81,7 @@ namespace NEngine {
 
     void TEngine::ApplyGravityToSheep(TShip& ship) {
         const TPoint shipPos = CalcRelativePosition(ship);
-        for (auto planet : Planets) {
+        for (auto& planet : Planets) {
             const TPoint planetPos = CalcRelativePosition(planet);
             ship.Speed += ApplyGravityImpl(planet, ship, planetPos,shipPos);
             for (auto& bullet : ship.GetBullets())
@@ -81,7 +91,9 @@ namespace NEngine {
 
     void TEngine::ApplyGravity() {
         ApplyGravityToSheep(Ship);
-        for (auto& aiShip : AiShips)
+        for (auto& aiShip : FriendlyShips)
+            ApplyGravityToSheep(aiShip);
+        for (auto& aiShip : EnemyShips)
             ApplyGravityToSheep(aiShip);
     }
 
@@ -104,12 +116,32 @@ namespace NEngine {
                 result.push_back(&bullet);
             }
 
-        for (auto& ship : AiShips) {
+        for (auto& ship : FriendlyShips) {
             result.push_back(&ship);
+            if (!mapOnly)
+                for (auto& bullet : ship.GetBullets()) {
+                    result.push_back(&bullet);
+                }
+        }
+
+        for (auto& ship : EnemyShips) {
+            result.push_back(&ship);
+            if (!mapOnly)
+                for (auto& bullet : ship.GetBullets()) {
+                    result.push_back(&bullet);
+                }
         }
 
         result.push_back(&Ship);
         return result;
+    }
+
+    void TEngine::ApplyAi() {
+        std::vector<TShip*> targetShips;
+        targetShips.push_back(&Ship);
+        for (auto& ship : EnemyShips) {
+            ThinkThenDo(ship, targetShips);
+        }
     }
 
     std::vector<const TObject*> TEngine::GetConstObjects(bool mapOnly) const {

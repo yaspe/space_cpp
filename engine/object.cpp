@@ -1,6 +1,9 @@
 #include "object.h"
 
+#include <cstdlib>
+
 static const double MAX_SPEED = 10;
+static const double MAX_ANGLE_SPEED = 15;
 
 namespace NEngine {
 
@@ -9,7 +12,11 @@ namespace NEngine {
         if (newSpeed.Straight() < MAX_SPEED || newSpeed.Straight() < Speed.Straight())
             Speed += Acc;
         Position += Speed;
-        AngleSpeed += AngleAcc;
+
+        auto newAngleSpeed = AngleSpeed + AngleAcc;
+        if (abs(static_cast<int>(newAngleSpeed)) < MAX_ANGLE_SPEED || abs(static_cast<int>(newAngleSpeed)) < abs(static_cast<int>(AngleSpeed)))
+            AngleSpeed += AngleAcc;
+
         Angle += AngleSpeed;
         AngleSpeed *= 0.99;
     }
@@ -31,7 +38,7 @@ namespace NEngine {
     }
 
     double TObject::GetAngle() const {
-        return Angle;
+        return static_cast<int>(Angle) % 360;
     }
 
     size_t TObject::GetSize() const {

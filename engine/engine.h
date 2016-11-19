@@ -31,12 +31,14 @@ namespace NEngine {
         void ApplyGravity();
         void ApplyGravityToSheep(TShip& ship);
         void CheckCollisions();
+        void ApplyAi();
 
     private:
         std::vector<TPlanet> Planets;
         std::vector<TBackGroundStar> BackGroundStars;
         TShip Ship;
-        std::vector<TShip> AiShips;
+        std::vector<TShip> FriendlyShips;
+        std::vector<TShip> EnemyShips;
         TSun Sun;
     };
 

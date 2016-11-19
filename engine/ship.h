@@ -25,10 +25,12 @@ namespace NEngine {
 
     private:
         bool CanShoot() const;
+        void ProcessEngines();
 
     private:
         const size_t TicksToReload = 50;
         size_t Ticks = 50;
         mutable std::vector<TBullet> Bullets;
+        bool MainEngineStatus = false;
     };
 }

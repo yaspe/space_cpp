@@ -21,19 +21,15 @@ namespace NEngine {
     }
 
     void TShip::Process() {
+        ProcessEngines();
         TObject::Process();
         if (!CanShoot())
             Ticks += 1;
     }
 
     void TShip::SetMainEngineStatus(bool on) {
-        if (on) {
-            Acc.X = -sin(DegreesToRadians(Angle)) * MAIN_ENGINE_POWER;
-            Acc.Y = cos(DegreesToRadians(Angle)) * MAIN_ENGINE_POWER;
-        } else {
-            Acc.X = 0;
-            Acc.Y = 0;
-        }
+        MainEngineStatus = on;
+
     }
 
     void TShip::SetLeftEngineStatus(bool on) {
@@ -49,6 +45,16 @@ namespace NEngine {
             AngleAcc = SIDE_ENGINE_POWER;
         } else {
             AngleAcc = 0;
+        }
+    }
+
+    void TShip::ProcessEngines() {
+        if (MainEngineStatus) {
+            Acc.X = -sin(DegreesToRadians(Angle)) * MAIN_ENGINE_POWER;
+            Acc.Y = cos(DegreesToRadians(Angle)) * MAIN_ENGINE_POWER;
+        } else {
+            Acc.X = 0;
+            Acc.Y = 0;
         }
     }
 

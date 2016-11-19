@@ -11,6 +11,8 @@ namespace NEngine {
         std::string GetPngTextureName() const override;
 
         void Process() override;
+    private:
+        std::string TextureName;
     };
 
 }

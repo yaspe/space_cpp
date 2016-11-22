@@ -71,22 +71,25 @@ namespace NEngine {
 
     }
 
-    static TPoint ApplyGravityImpl(const TPlanet& planet, TObject& object, const TPoint& planetPos, const TPoint& objPos) {
+    static TPoint ApplyGravityImpl(const TObject& dealer, TObject& object, const TPoint& planetPos, const TPoint& objPos) {
         auto distance = planetPos - objPos;
-        auto totalDistance = std::max(static_cast<size_t>(distance.Straight()), planet.GetSize());
-        auto totalForce = GRAVITY * planet.GetMass() / (totalDistance * totalDistance);
+        auto totalDistance = std::max(static_cast<size_t>(distance.Straight()), dealer.GetSize());
+        auto totalForce = GRAVITY * dealer.GetMass() / (totalDistance * totalDistance);
         TPoint force(distance.X * totalForce / totalDistance, distance.Y * totalForce / totalDistance);
         return force;
     }
 
     void TEngine::ApplyGravityToSheep(TShip& ship) {
         const TPoint shipPos = CalcRelativePosition(ship);
+        const TPoint sunPos = CalcRelativePosition(Sun);
         for (auto& planet : Planets) {
             const TPoint planetPos = CalcRelativePosition(planet);
-            ship.Speed += ApplyGravityImpl(planet, ship, planetPos,shipPos);
+            ship.Speed += ApplyGravityImpl(planet, ship, planetPos, shipPos);
             for (auto& bullet : ship.GetBullets())
                 bullet.Speed += ApplyGravityImpl(planet, bullet, planetPos, CalcRelativePosition(bullet));
         }
+
+        ship.Speed += ApplyGravityImpl(Sun, ship, sunPos, shipPos);
     }
 
     void TEngine::ApplyGravity() {

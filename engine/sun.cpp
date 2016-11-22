@@ -3,7 +3,7 @@
 namespace NEngine {
     TSun::TSun() {
         Size = 640;
-        Mass = 1000;
+        Mass = 500;
     }
 
     std::string TSun::GetPngTextureName() const {

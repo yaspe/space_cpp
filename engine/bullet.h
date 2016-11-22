@@ -13,6 +13,7 @@ namespace NEngine {
 
         void Process() override;
 
+        void Expire();
         bool Expired() const;
 
     private:

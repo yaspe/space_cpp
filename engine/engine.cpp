@@ -13,7 +13,7 @@ namespace NEngine {
     static const TPoint SCREEN_SIZE = TPoint(800, 640);
     static const double PLANET_MAX_ORBIT_SPEED = 0.001;
     static const size_t PLANET_MARGIN = 100;
-    static const size_t FRIENDLY_SHIPS_NUM = 2;
+    static const size_t FRIENDLY_SHIPS_NUM = 0;
     static const size_t ENEMY_SHIPS_NUM = 3;
 
     TEngine::TEngine() {
@@ -65,9 +65,16 @@ namespace NEngine {
         }
         ApplyGravity();
         ApplyAi();
+        CheckCollisions();
     }
 
     void TEngine::CheckCollisions() {
+        for (auto& bullet : Ship.GetBullets())
+            for (auto& enemy: EnemyShips)
+                if ((bullet.Position - enemy.Position).Straight() < enemy.Size / 2) {
+                    bullet.Expire();
+                    enemy.Kill();
+                }
 
     }
 

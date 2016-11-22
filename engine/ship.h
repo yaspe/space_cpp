@@ -21,6 +21,9 @@ namespace NEngine {
 
         void Shoot();
 
+        bool IsAlive() const;
+        void Kill();
+
         std::vector<TBullet>& GetBullets() const;
 
     private:
@@ -32,5 +35,6 @@ namespace NEngine {
         size_t Ticks = 50;
         mutable std::vector<TBullet> Bullets;
         bool MainEngineStatus = false;
+        bool Alive = true;
     };
 }

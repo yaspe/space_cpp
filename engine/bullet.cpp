@@ -17,6 +17,10 @@ namespace NEngine {
         }
     }
 
+    void TBullet::Expire() {
+        Ticks = TicksToExpire;
+    }
+
     bool TBullet::Expired() const {
         return Ticks >= TicksToExpire;
     }

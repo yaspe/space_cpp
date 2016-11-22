@@ -17,7 +17,7 @@ namespace NEngine {
     }
 
     std::string TShip::GetPngTextureName() const {
-        return "ship.png";
+        return Alive ? "ship.png" : "dead_ship.png";
     }
 
     void TShip::Process() {
@@ -83,6 +83,14 @@ namespace NEngine {
 
     bool TShip::CanShoot() const {
         return Ticks > TicksToReload;
+    }
+
+    bool TShip::IsAlive() const {
+        return Alive;
+    }
+
+    void TShip::Kill() {
+        Alive = false;
     }
 
 }
